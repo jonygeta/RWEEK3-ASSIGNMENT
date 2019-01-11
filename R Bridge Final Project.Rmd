@@ -1,0 +1,92 @@
+---
+title: "R Bridge Final Project"
+author: "Yohannes Deboch"
+date: "January 6, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+# load the libraries
+library(ggplot2)
+```
+```{r}
+# read the data
+iris <- read.csv("iris.csv", row.names = 1)
+```
+
+# 1. Data Exploration: This should include summary statistics, means, median, quartiles or any other relevant information about the data set. Plese include some conclusions in the R Markdown text.
+
+## Summary Statistics
+```{r}
+# summary statistics
+summary(iris)
+
+```
+## Correlation
+```{r}
+# correlation
+cor(iris[,1:4])
+```
+
+Sepal length has the highest range among the 4 variables, Petal Width highest range, Sepal length has highest mean 5.84 and Petal width lowest men 1.99.Sepal Length is large for all the flower species while petal width is small.
+Sepal length is positively correlated with petal length and petal width and negative correlated with sepal width.Sepal width is negatively correlated with Sepal Length, petal length and petal width.Petal length is positively correlated with sepal length,Petal width and negatively correlated with sepal width.Petal width is positively correlated with sepal length, petal length and negatively correlated with sepal width.
+
+# 2. Data wrangling: Please perform some basic tranformation . Thy will need to make sens but could include column renaming, creating a subset of the data set.
+## Changing variable levels name
+```{r}
+levels(iris$Species)
+# Rename the factors
+# Rename all levels, by name
+levels(iris$Species) <- list(Setosa="setosa",Versicolor="versicolor", Virginica="virginica")
+```
+
+3. Graphics: Please make sure to display at least one scatter plot, box plot and histogram. Don' be limited to this. Please explore the many other options in R packages such as plotting2.
+
+```{r}
+# Scatterplot
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
+  geom_point()+ggtitle("Relation between Sepal Length and Sepal Width")+theme_classic()+xlab("Sepal Length")+ylab("Sepal Width")
+ggplot(iris, aes(x = Petal.Length, y = Petal.Width))+geom_point()+ggtitle("Relation between Petal Length and Petal Width")+theme_classic()+xlab("Petal Length")+ylab("Petal Width")+theme_classic()
+```
+```{r}
+# Boxplot
+ggplot(iris, aes(y = Sepal.Length,x = Species, fill= Species)) +
+  geom_boxplot()+ggtitle("Boxplot of Sepal Length By Species")+theme_classic()+xlab("Sepal Length")
+
+ggplot(iris, aes(y = Sepal.Length,x = Species, fill= Species)) +
+  geom_boxplot()+ggtitle("Boxplot of Sepal Width By Species")+theme_classic()+xlab("Sepal Width")
+```
+```{r}
+# Histogram
+ggplot(iris, aes(Sepal.Length)) +
+  geom_histogram(color="white")+ggtitle("Distribution of Sepal Length")+theme_classic()+xlab("Sepal Length")
+
+ggplot(iris, aes(Sepal.Length)) +
+  geom_histogram(color="white")+ggtitle("Distribution of Sepal Width")+theme_classic()+xlab("Sepal Width")
+```
+
+
+# 4. Meaning question for analysis: Plese state the beginning a meaningful question for analysis.
+Use the first three steps and anything else that would be helpful to answer the question your are posing from the data set you chose. Please write a brief conclusion paragraph in R markdown at the end.
+# Question: Are are there any difference between sepal width of 3 flower species?
+
+```{r}
+
+fit <- aov(Sepal.Width~Species, data = iris)
+summary(fit)
+```
+
+
+From the graphs of box plot of sepal width grouped by flower species we can see that there is difference among the sepal width of 3 flower species . We did a one way anova to test the difference significantly. At 5% level of significance with p value < 0.05 with 2 degrees of freedom we conclude that the difference of sepal width among the 3 species if significant.
+
+# 5. BONUS - Place the original csv in a github file and have R read from the link. This will be a very useful skills as you progress in your data science education career.
+
+```{r}
+url <- "https://raw.githubusercontent.com/jonygeta/iris.csv/master/iris.csv"
+
+iris <- read.csv(url)
+```
+
